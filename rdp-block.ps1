@@ -20,7 +20,7 @@ $query_purge = "DELETE FROM IP where TimeStamp < @TS"
 
 
 ##################  DETECTION DE L'EVENT 140 ###################################
-$DT = [DateTime]::Now.AddSeconds(-400)
+$DT = [DateTime]::Now.AddSeconds(-120)
 (Get-Date).ToString() + ' requete Event ' + ($DT).ToString()   >> $logfile
 $af = Get-WinEvent   -FilterHashTable @{ LogName = "Microsoft-Windows-RemoteDesktopServices-RdpCoreTS/Operational"; ID = 140 ; StartTime = $DT } -MaxEvents 1 | select-string -inputobject { $_.message } -Pattern $regex | % { $_.Matches } | Select-Object @{n = 'ClientIP'; e = { $_.Value } }  
 $getip = $af | group-object -property ClientIP | Select-Object -property Name
